@@ -2,7 +2,7 @@ export type Favorite = { kind: string; title: string; by: string; year: string; 
 
 export type Track = { title: string; artist: string; album: string; year: string; youtube: string; group?: string; note?: string }
 
-// Every id is an official upload (artist channel or YouTube's label-supplied "Topic" channel) that allows embedding.
+// Every id is an official upload (artist or label channel, or YouTube's label-supplied "Topic" channel) that allows embedding.
 export const playlist: Track[] = [
   { title: 'Young Lust', artist: 'Pink Floyd', album: 'The Wall', year: '1979', youtube: 'GRsLPoNNV64', group: 'Rock' },
   { title: 'Comfortably Numb', artist: 'Pink Floyd', album: 'The Wall', year: '1979', youtube: '7f3EGjRxxNI', group: 'Rock' },
@@ -34,11 +34,20 @@ export const playlist: Track[] = [
   { title: 'Dreamflower', artist: 'Tarika Blue', album: 'Tarika Blue', year: '1976', youtube: 'XhYpqI4HVYw', group: 'Jazz' },
   { title: 'Scenery', artist: 'Ryo Fukui', album: 'Scenery', year: '1976', youtube: 'sr4vIBaumiM', group: '70s Japanese jazz' },
   { title: 'It Could Happen to You', artist: 'Ryo Fukui', album: 'Scenery', year: '1976', youtube: '-yX4S7exMtU', group: '70s Japanese jazz' },
+  { title: 'Early Summer', artist: 'Ryo Fukui', album: 'Scenery', year: '1976', youtube: 'F5EFsUU7RRA', group: '70s Japanese jazz' },
+  { title: 'Mellow Dream', artist: 'Ryo Fukui', album: 'Mellow Dream', year: '1977', youtube: '26Bv8WsV-0g', group: '70s Japanese jazz' },
+  { title: 'Midnight Sugar', artist: 'Tsuyoshi Yamamoto Trio', album: 'Midnight Sugar', year: '1974', youtube: 'LEJ5ikJCc4Q', group: '70s Japanese jazz' },
   { title: 'Aqua Marine', artist: 'Isao Suzuki Trio', album: 'Blow Up', year: '1973', youtube: 'd8MMn7EPsp4', group: '70s Japanese jazz' },
   { title: 'Ōgarasu no Oshaberi', artist: 'Jiro Inagaki & Soul Media', album: 'In the Groove', year: '1973', youtube: 'ck1vgydjwxs', group: '70s Japanese jazz', note: '大ガラスのおしゃべり' },
+  { title: 'Salaam Salaam', artist: 'Takehiro Honda', album: 'Salaam Salaam', year: '1974', youtube: 'bmJfGFrF0t4', group: '70s Japanese jazz' },
+  { title: "Philosopher's Stone", artist: 'Tohru Aizawa Quartet', album: 'Tachibana', year: '1975', youtube: 'YBnle6lzxPA', group: '70s Japanese jazz' },
   { title: 'Cat', artist: 'Hiroshi Suzuki', album: 'Cat', year: '1975', youtube: 'ZeHFoBnhYPk', group: '70s Japanese jazz' },
+  { title: 'Romance', artist: 'Hiroshi Suzuki', album: 'Cat', year: '1975', youtube: 'K1XMmNNfjSY', group: '70s Japanese jazz' },
+  { title: 'Raisins', artist: 'Ryo Kawasaki', album: 'Juice', year: '1976', youtube: 'ZFFA5ncwwSg', group: '70s Japanese jazz' },
   { title: 'Hip Seagull', artist: 'Terumasa Hino', album: 'May Dance', year: '1977', youtube: 'JKCDDE0E5bk', group: '70s Japanese jazz' },
+  { title: 'City Connection', artist: 'Terumasa Hino', album: 'City Connection', year: '1979', youtube: 'eJX0C0_oW_I', group: '70s Japanese jazz' },
   { title: 'Brasilian Skies', artist: 'Masayoshi Takanaka', album: 'Brasilian Skies', year: '1978', youtube: 'Ra4L_3EPHMc', group: '70s Japanese jazz' },
+  { title: 'Blue Lagoon', artist: 'Masayoshi Takanaka', album: 'Jolly Jive', year: '1979', youtube: 'E3HBwtJNplQ', group: '70s Japanese jazz' },
 ]
 
 export const profile = {
