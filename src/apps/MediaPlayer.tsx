@@ -80,13 +80,15 @@ export function MediaPlayer({ args }: { args: Args }) {
         width: '100%', height: '100%',
         playerVars: { autoplay: 1, controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1, iv_load_policy: 3, fs: 0, origin: window.location.origin },
         events: {
-          onReady: (e: any) => { ready.current = true; e.target.setVolume(vol); e.target.playVideo() },
+          // Clear the "Opening..." overlay once ready: if the browser blocks autoplay, the user needs to see the player and press Play.
+          onReady: (e: any) => { ready.current = true; e.target.setVolume(vol); setState((st) => (st === 'loading' ? 'stopped' : st)); e.target.playVideo() },
           onStateChange: (e: any) => {
             const S = YT.PlayerState
             if (e.data === S.PLAYING) { setState('playing'); setError(''); setDur(e.target.getDuration() || 0) }
             else if (e.data === S.PAUSED) setState('paused')
             else if (e.data === S.ENDED) { setState('ended'); nextRef.current(1) }
             else if (e.data === S.BUFFERING) setDur(e.target.getDuration() || 0)
+            else if (e.data === S.CUED || e.data === S.UNSTARTED) setState((st) => (st === 'loading' ? 'stopped' : st))
           },
           onError: (e: any) => {
             setState('error')
