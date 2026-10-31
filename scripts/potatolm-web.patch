@@ -1,0 +1,29 @@
+--- a/src/chat/session.inc
++++ b/src/chat/session.inc
+@@ -378,6 +378,18 @@
+     mov rbx, [token_count]
+     cmp rbx, [cfg_context]
+     jb .append
++%ifdef WEB_HALF_SLIDE
++    ; Web build: slide the window by WEB_HALF_SLIDE tokens instead of one, so the
++    ; KV cache is rebuilt once every WEB_HALF_SLIDE tokens rather than on every token.
++    mov rdi, [tokens]
++    mov edx, WEB_HALF_SLIDE
++    lea rsi, [rdi+rdx*4]
++    mov rbx, [cfg_context]
++    sub rbx, rdx
++    mov rdx, rbx
++    shl rdx, 2
++    call memmove
++%else
+     mov rdi, [tokens]
+     lea rsi, [rdi+4]
+     mov rdx, [cfg_context]
+@@ -385,6 +397,7 @@
+     shl rdx, 2
+     call memmove
+     dec rbx
++%endif
+     mov qword [cache_len], 0
+ .append:
+     mov rax, [tokens]
