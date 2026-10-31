@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
 import { aboutTxt, profile } from '../data/profile'
 import { categories, projectsIn } from '../data/projects'
+import { Glyph } from './glyphs'
 import { Icon, type IconName } from './icons'
 import { useSystem } from './system'
 import { useOpenFavorite } from './actions'
@@ -101,7 +102,7 @@ export function StartMenu({ onClose, anchor }: { onClose: () => void; anchor: Re
               onClick={() => { if (en.items) { setSub(i); return } onClose(); en.onClick?.() }}>
               <Icon name={en.icon} size={24} />
               <span className="start-label"><Accel text={en.label} /></span>
-              {en.items && <span className="menu-arrow">▶</span>}
+              {en.items && <span className="menu-arrow"><Glyph name="arrow" /></span>}
               {en.items && sub === i && <MenuList items={en.items} onDone={onClose} className="submenu" />}
             </li>
           ))}

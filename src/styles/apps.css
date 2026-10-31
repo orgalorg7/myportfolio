@@ -178,6 +178,7 @@ table.details tbody tr { cursor: default; outline: none; }
 .cd-btns > div { display: flex; gap: 2px; }
 .os-root .cd-btn { min-width: 26px; padding: 0 4px; height: 22px; font-size: 9px; color: #000; text-shadow: none; }
 .os-root .cd-btn.wide { min-width: 54px; }
+.os-root .cd-btn .glyph { font-size: 11px; }
 .cd-info { padding: 0 8px; }
 .cd-info .field-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
 .cd-info label { width: 40px; }
@@ -292,6 +293,7 @@ table.details tbody tr { cursor: default; outline: none; }
 .mp-controls { display: flex; align-items: center; gap: 2px; padding: 2px 6px 4px; }
 .os-root .mp-btn { min-width: 30px; height: 24px; padding: 0 6px; color: #000; text-shadow: none; font-size: 10px; }
 .os-root .mp-btn.wide { min-width: 44px; }
+.os-root .mp-btn .glyph { font-size: 13px; }
 .mp-sep { width: 8px; }
 .mp-vol { margin-left: auto; display: flex; align-items: center; gap: 4px; }
 .mp-vol input { width: 90px; }
@@ -332,6 +334,8 @@ table.details tbody tr { cursor: default; outline: none; }
   .mp-controls { justify-content: center; gap: 10px; padding: 2px 12px 10px; border-bottom: 1px solid #808080; }
   .os-root .mp-btn { min-width: 48px; height: 44px; font-size: 15px; padding: 0 8px; }
   .os-root .mp-btn.mp-play { min-width: 68px; height: 52px; font-size: 22px; }
+  .os-root .mp-btn .glyph { font-size: 20px; }
+  .os-root .mp-btn.mp-play .glyph { font-size: 26px; }
   .mp-shuf { order: -1; margin-right: auto; }
   .mp-rep { margin-left: auto; }
   .mp-prev { order: 0; } .mp-play { order: 1; } .mp-next { order: 2; } .mp-rep { order: 3; }

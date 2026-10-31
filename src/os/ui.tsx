@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { Glyph } from './glyphs'
 import { Icon, type IconName } from './icons'
 
 /* "&File" -> F underlined, like a Win32 accelerator. */
@@ -30,7 +31,7 @@ export function MenuList({ items, onDone, className = '' }: { items: MenuItem[];
             <span className="menu-check">{it.checked ? (it.radio ? '●' : '✓') : it.icon ? <Icon name={it.icon} size={16} /> : null}</span>
             <span className="menu-label"><Accel text={it.label} /></span>
             {it.shortcut && <span className="menu-shortcut">{it.shortcut}</span>}
-            {it.items && <span className="menu-arrow">▶</span>}
+            {it.items && <span className="menu-arrow"><Glyph name="arrow" /></span>}
             {it.items && sub === i && <MenuList items={it.items} onDone={onDone} className="submenu" />}
           </li>
         ))}

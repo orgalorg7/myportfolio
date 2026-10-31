@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Glyph } from '../os/glyphs'
 import { playlist } from '../data/profile'
 import { coarsePointer } from '../astra/term'
 import { MenuBar } from '../os/ui'
@@ -171,16 +172,16 @@ export function MediaPlayer({ args }: { args: Args }) {
           <span className="mp-time">{fmt(dur)}</span>
           </div>
           <div className="mp-controls">
-            <button className="mp-btn wide mp-play" onClick={playPause} aria-label={state === 'playing' ? 'Pause' : 'Play'}>{state === 'playing' ? '❚❚' : '▶'}</button>
-            <button className="mp-btn mp-desk" onClick={stop} aria-label="Stop">■</button>
+            <button className="mp-btn wide mp-play" onClick={playPause} aria-label={state === 'playing' ? 'Pause' : 'Play'}><Glyph name={state === 'playing' ? 'pause' : 'play'} /></button>
+            <button className="mp-btn mp-desk" onClick={stop} aria-label="Stop"><Glyph name="stop" /></button>
             <span className="mp-sep mp-desk" />
-            <button className="mp-btn mp-prev" onClick={() => next(-1)} aria-label="Previous track">|◀◀</button>
-            <button className="mp-btn mp-desk" onClick={() => seek(time - 10)} aria-label="Rewind 10 seconds">◀◀</button>
-            <button className="mp-btn mp-desk" onClick={() => seek(time + 10)} aria-label="Forward 10 seconds">▶▶</button>
-            <button className="mp-btn mp-next" onClick={() => next(1)} aria-label="Next track">▶▶|</button>
+            <button className="mp-btn mp-prev" onClick={() => next(-1)} aria-label="Previous track"><Glyph name="prev" /></button>
+            <button className="mp-btn mp-desk" onClick={() => seek(time - 10)} aria-label="Rewind 10 seconds"><Glyph name="rewind" /></button>
+            <button className="mp-btn mp-desk" onClick={() => seek(time + 10)} aria-label="Forward 10 seconds"><Glyph name="forward" /></button>
+            <button className="mp-btn mp-next" onClick={() => next(1)} aria-label="Next track"><Glyph name="next" /></button>
             <span className="mp-sep mp-desk" />
-            <button className={`mp-btn toggle mp-shuf ${shuffle ? 'on' : ''}`} onClick={() => setShuffle((v) => !v)} aria-pressed={shuffle} title="Shuffle" aria-label="Shuffle">⤮</button>
-            <button className={`mp-btn toggle mp-rep ${repeat ? 'on' : ''}`} onClick={() => setRepeat((v) => !v)} aria-pressed={repeat} title="Repeat playlist" aria-label="Repeat playlist">⟳</button>
+            <button className={`mp-btn toggle mp-shuf ${shuffle ? 'on' : ''}`} onClick={() => setShuffle((v) => !v)} aria-pressed={shuffle} title="Shuffle" aria-label="Shuffle"><Glyph name="shuffle" /></button>
+            <button className={`mp-btn toggle mp-rep ${repeat ? 'on' : ''}`} onClick={() => setRepeat((v) => !v)} aria-pressed={repeat} title="Repeat playlist" aria-label="Repeat playlist"><Glyph name="repeat" /></button>
             <span className="mp-vol mp-desk">
               <span aria-hidden="true">🔊</span>
               <input type="range" min={0} max={100} value={vol} onChange={(e) => setVolume(Number(e.target.value))} aria-label="Volume" />

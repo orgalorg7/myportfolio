@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Glyph } from '../os/glyphs'
 import { profile } from '../data/profile'
 import { audio, hz, isMuted, onMute, setMuted, tone } from '../os/sound'
 import { MenuBar } from '../os/ui'
@@ -174,15 +175,15 @@ export function CDPlayer() {
         </div>
         <div className="cd-btns">
           <div>
-            <button className="cd-btn wide" onClick={() => (state === 'pause' ? play(track, elapsed) : play())} aria-label="Play">▶</button>
-            <button className="cd-btn" onClick={() => { if (state === 'play') { stop(); setState('pause') } }} aria-label="Pause">❚❚</button>
-            <button className="cd-btn" onClick={() => { stop(); setState('stop'); setElapsed(0) }} aria-label="Stop">■</button>
+            <button className="cd-btn wide" onClick={() => (state === 'pause' ? play(track, elapsed) : play())} aria-label="Play"><Glyph name="play" /></button>
+            <button className="cd-btn" onClick={() => { if (state === 'play') { stop(); setState('pause') } }} aria-label="Pause"><Glyph name="pause" /></button>
+            <button className="cd-btn" onClick={() => { stop(); setState('stop'); setElapsed(0) }} aria-label="Stop"><Glyph name="stop" /></button>
           </div>
           <div>
-            <button className="cd-btn" onClick={() => go(-1)} aria-label="Previous track">|◀◀</button>
-            <button className="cd-btn" onClick={() => state === 'play' && play(track, Math.max(0, elapsed - 4))} aria-label="Skip back">◀◀</button>
-            <button className="cd-btn" onClick={() => state === 'play' && play(track, Math.min(len - 0.5, elapsed + 4))} aria-label="Skip forward">▶▶</button>
-            <button className="cd-btn" onClick={() => go(1)} aria-label="Next track">▶▶|</button>
+            <button className="cd-btn" onClick={() => go(-1)} aria-label="Previous track"><Glyph name="prev" /></button>
+            <button className="cd-btn" onClick={() => state === 'play' && play(track, Math.max(0, elapsed - 4))} aria-label="Skip back"><Glyph name="rewind" /></button>
+            <button className="cd-btn" onClick={() => state === 'play' && play(track, Math.min(len - 0.5, elapsed + 4))} aria-label="Skip forward"><Glyph name="forward" /></button>
+            <button className="cd-btn" onClick={() => go(1)} aria-label="Next track"><Glyph name="next" /></button>
             <button className="cd-btn" onClick={() => wm.alert({ title: 'CD Player', icon: 'warning', message: 'The disc tray is stuck.\n\n(It\'s 2026. There is no disc.)' })} aria-label="Eject">⏏</button>
           </div>
         </div>

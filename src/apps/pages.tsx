@@ -140,7 +140,7 @@ function About({ nav }: { nav: Nav }) {
         <li>I own a potato that talks. Ask it who created it. (It&apos;s <L to="nehad://projects/potatolm" nav={nav}>PotatoLM</L>, and it&apos;s right.)</li>
         <li>I built a falling-block game with a <i>time machine</i> in it. You can <a href="#" onClick={(e) => { e.preventDefault(); wm.open('astra') }}>play it right here</a>.</li>
         <li>I have strong feelings about storing money as integers. I will bring this up at parties.</li>
-        <li>My playlist goes Pink Floyd → MF DOOM → 70s Japanese jazz without blinking. <a href="#" onClick={(e) => { e.preventDefault(); wm.open('mediaplayer') }}>Judge for yourself ▶</a></li>
+        <li>My playlist goes Pink Floyd → MF DOOM → 70s Japanese jazz without blinking. <a href="#" onClick={(e) => { e.preventDefault(); wm.open('mediaplayer') }}>Judge for yourself ►</a></li>
         <li>Favourite film: <i>Downfall</i>. Favourite way to react to a failed deploy: also <i>Downfall</i>.</li>
         <li>Coffee level: dangerously low. Please run <code>C:\WINDOWS\COFFEE.EXE</code>.</li>
       </ul>
@@ -210,7 +210,7 @@ function Home({ nav }: { nav: Nav }) {
         <tr><th colSpan={2}>What I'm up to</th></tr>
         {profile.currently.map(([k, v]) => <tr key={k}><td><b>{k}</b></td><td>{v}</td></tr>)}
         <tr><td><b>Team</b></td><td>{profile.team.role} at <Ext href={profile.team.url}>{profile.team.name}</Ext>, a software studio in Cairo</td></tr>
-        <tr><td><b>Listening</b></td><td>The Wall (Pink Floyd), Pink Floyd, King Crimson, MF DOOM, Tribe, Ahmad Jamal and 70s Japanese jazz. <a href="#" onClick={(e) => { e.preventDefault(); wm.open('mediaplayer') }}>▶ Play my playlist</a></td></tr>
+        <tr><td><b>Listening</b></td><td>The Wall (Pink Floyd), Pink Floyd, King Crimson, MF DOOM, Tribe, Ahmad Jamal and 70s Japanese jazz. <a href="#" onClick={(e) => { e.preventDefault(); wm.open('mediaplayer') }}>► Play my playlist</a></td></tr>
       </tbody></table>
 
       <div className="construction"><span>🚧 This page is always under construction 🚧</span></div>
@@ -283,13 +283,13 @@ function ProjectPage({ p, nav }: { p: Project; nav: Nav }) {
       </p>
       {p.demo && (
         <div className="pj-play">
-          <button className="play-btn" onClick={() => nav(p.demo!)}>▶ Explore it live</button>
+          <button className="play-btn" onClick={() => nav(p.demo!)}>► Explore it live</button>
           <span>Opens the <b>real {p.name} gallery</b> right in this window: zoom around interactive maps of 16 open-source codebases.</span>
         </div>
       )}
       {p.play && (
         <div className="pj-play">
-          <button className="play-btn" onClick={() => wm.open(p.play!)}>▶ {p.id === 'potatolm' ? 'Chat with it now' : 'Play it now'}</button>
+          <button className="play-btn" onClick={() => wm.open(p.play!)}>► {p.id === 'potatolm' ? 'Chat with it now' : 'Play it now'}</button>
           <span>This runs the <b>real {p.file}</b> {p.id === 'potatolm' ? 'binary (a static build)' : 'binary, unchanged,'} on an x86-64 emulator in your browser.</span>
         </div>
       )}
