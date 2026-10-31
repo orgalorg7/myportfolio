@@ -25,3 +25,5 @@ dist-ssr
 
 # Original of public/me/little-me.jpg (the site uses the resized, metadata-free copy)
 /Image(256).jpg
+.vercel
+.env*
