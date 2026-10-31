@@ -91,7 +91,7 @@ None of this shows up in a screenshot. All of it shows up the first time a payme
     summary: 'A portfolio you can poke at says more than one you scroll past.',
     body: `Most portfolios are a hero section, three cards and a contact form. You scroll, you forget.
 
-I wanted one you could poke at. So it boots: a power button, a BIOS screen whose "drives" are my projects, and a startup chime I synthesised from scratch. Everything after that is a working little operating system:
+I wanted one you could poke at. So it boots: a quick BIOS screen whose "drives" are my projects, a startup splash, and a chime I synthesised from scratch. Everything after that is a working little operating system:
 
 - Projects are .EXE files in C:\\Projects, and Explorer describes the one you click.
 - The DOS prompt has real commands. Try \`neofetch\`, \`projects\` or \`sudo make coffee\`.

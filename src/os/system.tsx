@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
 
-export type Phase = 'power' | 'bios' | 'splash' | 'desktop' | 'shutting' | 'off' | 'bsod' | 'dos'
+export type Phase = 'bios' | 'splash' | 'desktop' | 'shutting' | 'off' | 'bsod' | 'dos'
 
 export type Settings = {
   wallpaper: string
@@ -43,7 +43,7 @@ export function SystemProvider({ children }: { children: ReactNode }) {
   const [phase, setPhase] = useState<Phase>(() => {
     // ?scene=og stages the desktop for the link-preview screenshot (see scripts/og-image.sh).
     if (new URLSearchParams(location.search).get('scene') === 'og') return 'desktop'
-    try { return sessionStorage.getItem('n98.booted') ? 'desktop' : 'power' } catch { return 'power' }
+    try { return sessionStorage.getItem('n98.booted') ? 'desktop' : 'bios' } catch { return 'bios' }
   })
   const [settings, setSettings] = useState(load)
   const [saverActive, setSaverActive] = useState(false)

@@ -1,28 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { profile } from '../data/profile'
 import { Logo } from './icons'
-import { sfx, audio } from './sound'
+import { audio, sfx } from './sound'
 import { useSystem } from './system'
-
-/* ---------------- Power button ---------------- */
-export function PowerScreen() {
-  const { setPhase } = useSystem()
-  const go = () => { audio(); setPhase('bios') }
-  useEffect(() => {
-    const k = (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') go() }
-    window.addEventListener('keydown', k)
-    return () => window.removeEventListener('keydown', k)
-  })
-  return (
-    <div className="screen power-screen" onClick={go}>
-      <button className="power-btn" aria-label="Power on" onClick={(e) => { e.stopPropagation(); go() }}>
-        <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path d="M12 3v8M7 6.5a7 7 0 1 0 10 0" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>
-      </button>
-      <p className="power-hint">Press the power button</p>
-      <p className="power-sub">🔊 Sound on for the full experience · {profile.name}'s portfolio</p>
-    </div>
-  )
-}
 
 /* ---------------- BIOS POST ---------------- */
 const drives = [['Primary Master', 'XRAY-CODEBASE 10LANG'], ['Primary Slave', 'POTATOLM NASM-AVX2'], ['Secondary Master', 'ASTRA MULTIVERSE ASM'], ['Secondary Slave', 'ARGUS AUTH-ONLY']]
@@ -36,14 +16,14 @@ export function BiosScreen() {
   useEffect(() => {
     sfx.post()
     const finish = () => { if (!done.current) { done.current = true; setPhase('splash') } }
+    // The whole POST takes about 1.5 s; a click or key skips straight to the splash.
     let m = 0
-    const memT = setInterval(() => { m = Math.min(65536, m + 2048); setMem(m); if (m >= 65536) clearInterval(memT) }, 28)
-    const timers = [1100, 1500, 1800, 2100, 2400, 2800, 3300, 3900].map((t, i) => setTimeout(() => setStep(i + 1), t))
-    const end = setTimeout(finish, 4600)
-    const skip = (e: KeyboardEvent | MouseEvent) => { if (!(e instanceof KeyboardEvent) || e.key === 'Escape' || e.key === 'Delete' || e.key === 'Enter') finish() }
-    // Arm skipping a moment later so the power-button click doesn't skip the POST.
-    const arm = setTimeout(() => { window.addEventListener('keydown', skip); window.addEventListener('click', skip) }, 400)
-    return () => { clearInterval(memT); timers.forEach(clearTimeout); clearTimeout(end); clearTimeout(arm); window.removeEventListener('keydown', skip); window.removeEventListener('click', skip) }
+    const memT = setInterval(() => { m = Math.min(65536, m + 8192); setMem(m); if (m >= 65536) clearInterval(memT) }, 30)
+    const timers = [300, 420, 540, 660, 780, 920, 1050, 1200].map((t, i) => setTimeout(() => setStep(i + 1), t))
+    const end = setTimeout(finish, 1500)
+    const skip = () => { audio(); finish() }
+    window.addEventListener('keydown', skip); window.addEventListener('pointerdown', skip)
+    return () => { clearInterval(memT); timers.forEach(clearTimeout); clearTimeout(end); window.removeEventListener('keydown', skip); window.removeEventListener('pointerdown', skip) }
   }, [setPhase])
 
   const date = new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
@@ -77,9 +57,9 @@ export function SplashScreen({ mode = 'startup' }: { mode?: 'startup' | 'shutdow
   const { setPhase } = useSystem()
   useEffect(() => {
     if (mode === 'startup') sfx.startup(); else sfx.shutdown()
-    const t = setTimeout(() => setPhase(mode === 'startup' ? 'desktop' : 'off'), mode === 'startup' ? 3800 : 2600)
+    const t = setTimeout(() => setPhase(mode === 'startup' ? 'desktop' : 'off'), mode === 'startup' ? 1400 : 2600)
     const skip = () => { clearTimeout(t); setPhase(mode === 'startup' ? 'desktop' : 'off') }
-    const arm = setTimeout(() => { window.addEventListener('click', skip); window.addEventListener('keydown', skip) }, 600)
+    const arm = setTimeout(() => { window.addEventListener('click', skip); window.addEventListener('keydown', skip) }, 300)
     return () => { clearTimeout(t); clearTimeout(arm); window.removeEventListener('click', skip); window.removeEventListener('keydown', skip) }
   }, [mode, setPhase])
   return (
@@ -102,7 +82,7 @@ export function SplashScreen({ mode = 'startup' }: { mode?: 'startup' | 'shutdow
 export function OffScreen() {
   const { setPhase } = useSystem()
   return (
-    <div className="screen off-screen" onClick={() => setPhase('power')}>
+    <div className="screen off-screen" onClick={() => setPhase('bios')}>
       <p>It's now safe to turn off<br />your computer.</p>
       <small>(click anywhere to turn it back on)</small>
     </div>
@@ -118,7 +98,7 @@ export function Bsod() {
     const t = setTimeout(() => { armed = true }, 400)
     const k = (e: KeyboardEvent | MouseEvent) => {
       if (!armed) return
-      if (e instanceof KeyboardEvent && e.ctrlKey && e.altKey && e.key === 'Delete') { setPhase('power'); return }
+      if (e instanceof KeyboardEvent && e.ctrlKey && e.altKey && e.key === 'Delete') { setPhase('bios'); return }
       setPhase('desktop')
     }
     window.addEventListener('keydown', k)

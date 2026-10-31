@@ -1,6 +1,6 @@
 # Nehad 98
 
-Mohammed Nehad's portfolio, built as a working 1998-style desktop. You press the power button, watch the BIOS POST and the startup splash, and land on a desktop where every project lives in a folder.
+Mohammed Nehad's portfolio, built as a working 1998-style desktop. It boots by itself through a short BIOS POST and startup splash (about 3 seconds, click to skip) and lands on a desktop where every project lives in a folder.
 
 ## What's inside
 

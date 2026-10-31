@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Terminal } from './apps/Terminal'
 import { Desktop } from './os/Desktop'
-import { BiosScreen, Bsod, OffScreen, PowerScreen, ScreenSaver, SplashScreen } from './os/Screens'
+import { BiosScreen, Bsod, OffScreen, ScreenSaver, SplashScreen } from './os/Screens'
 import { SystemProvider, useSystem } from './os/system'
 import { useWM, WindowManagerProvider } from './os/wm'
 
@@ -41,7 +41,6 @@ function Shell() {
   }, [sys.phase, wm])
 
   switch (sys.phase) {
-    case 'power': return <PowerScreen />
     case 'bios': return <BiosScreen />
     case 'splash': return <SplashScreen />
     case 'shutting': return <SplashScreen mode="shutdown" />

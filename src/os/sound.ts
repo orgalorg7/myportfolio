@@ -19,6 +19,13 @@ export function audio() {
   return { ctx, out: master! }
 }
 
+// Browsers allow sound only after the visitor has interacted with the page. Until then the audio
+// clock is stopped, so anything scheduled would pile up and play all at once on the first click.
+export function canPlay() {
+  const ua = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation
+  return ctx?.state === 'running' || (ua ? ua.hasBeenActive : true)
+}
+
 export function isMuted() { return muted }
 export function onMute(fn: (m: boolean) => void) { listeners.add(fn); return () => { listeners.delete(fn) } }
 export function setMuted(m: boolean) {
@@ -31,6 +38,7 @@ export function setMuted(m: boolean) {
 type ToneOpts = { type?: OscillatorType; gain?: number; attack?: number; release?: number; detune?: number; dest?: AudioNode }
 
 export function tone(freq: number, start: number, dur: number, o: ToneOpts = {}) {
+  if (!canPlay()) return
   const { ctx, out } = audio()
   const t = ctx.currentTime + start
   const osc = ctx.createOscillator()
@@ -51,6 +59,7 @@ export function tone(freq: number, start: number, dur: number, o: ToneOpts = {})
 }
 
 function noise(start: number, dur: number, gain = 0.05) {
+  if (!canPlay()) return
   const { ctx, out } = audio()
   const buf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * dur), ctx.sampleRate)
   const data = buf.getChannelData(0)
