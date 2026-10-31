@@ -286,6 +286,7 @@ table.details tbody tr { cursor: default; outline: none; }
 .mp-video { position: relative; flex: 1; min-height: 160px; background: #000; margin: 0 2px; box-shadow: inset 1px 1px #808080, inset -1px -1px #fff; }
 .mp-frame, .mp-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 .mp-loading, .mp-error { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; color: #c0c0c0; font: 18px var(--mono); gap: 8px; padding: 12px; }
+.mp-loading { pointer-events: none; }
 .mp-error a { color: #5ff; }
 .mp-seek { margin: 6px 6px 2px; width: calc(100% - 12px); }
 .mp-controls { display: flex; align-items: center; gap: 2px; padding: 2px 6px 4px; }
@@ -311,7 +312,43 @@ table.details tbody tr { cursor: default; outline: none; }
 .mp-t small { opacity: .75; }
 .os-root .mp-btn.toggle.on { box-shadow: inset -1px -1px #fff, inset 1px 1px #0a0a0a, inset -2px -2px #dfdfdf, inset 2px 2px #808080; background-image: conic-gradient(#fff 25%, transparent 0 50%, #fff 0 75%, transparent 0); background-size: 2px 2px; }
 .mp-error button { justify-self: center; }
-@media (max-width: 640px) { .mp-main { flex-direction: column; padding: 0 4px; } .mp-list { width: auto; max-height: 180px; } }
+.mp-now, .mp-time { display: none; }
+.mp-seekrow { display: flex; align-items: center; }
+.mp-seekrow .mp-seek { flex: 1; width: auto; }
+
+/* Phones: video on top at 16:9, a clear now-playing line, big touch controls, and the playlist
+   gets the rest of the screen. Stop, ±10 s and volume are left out: phones use their own volume keys. */
+@media (max-width: 640px) {
+  .mp-main { flex-direction: column; padding: 0; gap: 0; }
+  .mp-left { flex: none; }
+  .mp-video { flex: none; min-height: 0; aspect-ratio: 16 / 9; margin: 0; }
+  .mp-info, .mp-desk { display: none !important; }
+  .mp-now { display: flex; flex-direction: column; gap: 1px; padding: 8px 12px 2px; min-width: 0; }
+  .mp-now b { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mp-now span { font-size: 12px; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mp-seekrow { gap: 8px; padding: 0 12px; }
+  .mp-seekrow .mp-seek { margin: 0; height: 28px; }
+  .mp-time { display: block; font: 12px var(--mono); color: #333; min-width: 38px; text-align: center; }
+  .mp-controls { justify-content: center; gap: 10px; padding: 2px 12px 10px; border-bottom: 1px solid #808080; }
+  .os-root .mp-btn { min-width: 48px; height: 44px; font-size: 15px; padding: 0 8px; }
+  .os-root .mp-btn.mp-play { min-width: 68px; height: 52px; font-size: 22px; }
+  .mp-shuf { order: -1; margin-right: auto; }
+  .mp-rep { margin-left: auto; }
+  .mp-prev { order: 0; } .mp-play { order: 1; } .mp-next { order: 2; } .mp-rep { order: 3; }
+  .mp-list { width: auto; flex: 1; min-height: 0; margin: 0; max-height: none; box-shadow: none !important; -webkit-overflow-scrolling: touch; }
+  .mp-list-head { padding: 8px 12px; font-size: 13px; z-index: 2; }
+  .mp-group { position: sticky; top: 33px; z-index: 1; background: #f4f4f4; padding: 6px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; border-top: 0; border-bottom: 1px solid #ddd; }
+  .mp-item { min-height: 52px; align-items: center; padding: 6px 12px; gap: 12px; border-bottom: 1px solid #eee; }
+  .mp-item:hover { background: inherit; }
+  .mp-item:active { background: #e8e8f8; }
+  .mp-item.on, .mp-item.on:active { background: var(--hilite); }
+  .mp-num { width: 22px; font-size: 13px; color: #888; }
+  .mp-item.on .mp-num { color: #fff; font-size: 16px; }
+  .mp-t b { font-size: 15px; }
+  .mp-t small { font-size: 12px; margin-top: 1px; }
+}
+/* Short phones: a shorter video leaves room for more of the playlist. */
+@media (max-width: 640px) and (max-height: 720px) { .mp-video { aspect-ratio: auto; height: 24vh; } }
 .potato .astra-screen { background: #0b0d08; }
 .os-root .tool-btn.suggest { font-style: italic; color: #000080; }
 .ie-frame { display: block; width: 100%; height: 100%; border: 0; background: #fff; }

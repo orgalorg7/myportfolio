@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { playlist } from '../data/profile'
+import { coarsePointer } from '../astra/term'
 import { MenuBar } from '../os/ui'
 import { useWin, useWM } from '../os/wm'
 
@@ -47,10 +48,13 @@ export function MediaPlayer({ args }: { args: Args }) {
   const [error, setError] = useState('')
   const seeking = useRef(false)
   const track = playlist[index]
+  const list = useRef<HTMLDivElement>(null)
 
   // Opening a specific track while the player is already open switches to it.
   useEffect(() => { if (args?.youtube) setIndex(indexOf(args)) }, [args])
   useEffect(() => { setTitle(`${track.title} - Media Player`) }, [track, setTitle])
+  // Keep the current track visible in the playlist (matters most on phones, where the list scrolls).
+  useEffect(() => { list.current?.querySelector('.mp-item.on')?.scrollIntoView({ block: 'nearest' }) }, [index])
 
   const next = (dir = 1) => {
     setIndex((i) => {
@@ -66,6 +70,9 @@ export function MediaPlayer({ args }: { args: Args }) {
   }
   const nextRef = useRef(next)
   nextRef.current = next
+  const indexRef = useRef(index)
+  const loaded = useRef(playlist[index].youtube)
+  indexRef.current = index
 
   // Create the YouTube player once.
   useEffect(() => {
@@ -78,10 +85,18 @@ export function MediaPlayer({ args }: { args: Args }) {
         host: 'https://www.youtube-nocookie.com',
         videoId: playlist[index].youtube,
         width: '100%', height: '100%',
-        playerVars: { autoplay: 1, controls: 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1, iv_load_policy: 3, fs: 0, origin: window.location.origin },
+        // Phones often only start YouTube from a tap inside the video, so touch screens get YouTube's own controls.
+        playerVars: { autoplay: 1, controls: coarsePointer() ? 1 : 0, disablekb: 1, modestbranding: 1, rel: 0, playsinline: 1, iv_load_policy: 3, fs: 0, origin: window.location.origin },
         events: {
           // Clear the "Opening..." overlay once ready: if the browser blocks autoplay, the user needs to see the player and press Play.
-          onReady: (e: any) => { ready.current = true; e.target.setVolume(vol); setState((st) => (st === 'loading' ? 'stopped' : st)); e.target.playVideo() },
+          onReady: (e: any) => {
+            ready.current = true
+            e.target.setVolume(vol)
+            setState((st) => (st === 'loading' ? 'stopped' : st))
+            // A track picked while YouTube was still loading.
+            const want = playlist[indexRef.current].youtube
+            if (want !== loaded.current) { loaded.current = want; e.target.loadVideoById(want) } else e.target.playVideo()
+          },
           onStateChange: (e: any) => {
             const S = YT.PlayerState
             if (e.data === S.PLAYING) { setState('playing'); setError(''); setDur(e.target.getDuration() || 0) }
@@ -105,7 +120,6 @@ export function MediaPlayer({ args }: { args: Args }) {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Switch tracks without rebuilding the player.
-  const loaded = useRef(playlist[index].youtube)
   useEffect(() => {
     if (!ready.current || loaded.current === track.youtube) return
     loaded.current = track.youtube
@@ -143,23 +157,31 @@ export function MediaPlayer({ args }: { args: Args }) {
             {state === 'error' && <div className="mp-error"><p>{error}</p><a href={`https://www.youtube.com/watch?v=${track.youtube}`} target="_blank" rel="noreferrer">Open on YouTube ↗</a><button onClick={() => next(1)}>Skip to next track</button></div>}
             {state === 'loading' && <div className="mp-loading">Opening {track.title}...</div>}
           </div>
+          <div className="mp-now">
+            <b>{track.title}</b>
+            <span>{track.artist} · {track.album} ({track.year})</span>
+          </div>
+          <div className="mp-seekrow">
+          <span className="mp-time">{fmt(time)}</span>
           <input className="mp-seek" type="range" min={0} max={Math.max(1, Math.floor(dur))} step={1} value={Math.floor(time)} aria-label="Seek"
             onPointerDown={() => { seeking.current = true }}
             onChange={(e) => setTime(Number(e.target.value))}
             onPointerUp={(e) => { seeking.current = false; seek(Number((e.target as HTMLInputElement).value)) }}
             onKeyUp={(e) => seek(Number((e.target as HTMLInputElement).value))} />
+          <span className="mp-time">{fmt(dur)}</span>
+          </div>
           <div className="mp-controls">
-            <button className="mp-btn wide" onClick={playPause} aria-label={state === 'playing' ? 'Pause' : 'Play'}>{state === 'playing' ? '❚❚' : '▶'}</button>
-            <button className="mp-btn" onClick={stop} aria-label="Stop">■</button>
-            <span className="mp-sep" />
-            <button className="mp-btn" onClick={() => next(-1)} aria-label="Previous track">|◀◀</button>
-            <button className="mp-btn" onClick={() => seek(time - 10)} aria-label="Rewind 10 seconds">◀◀</button>
-            <button className="mp-btn" onClick={() => seek(time + 10)} aria-label="Forward 10 seconds">▶▶</button>
-            <button className="mp-btn" onClick={() => next(1)} aria-label="Next track">▶▶|</button>
-            <span className="mp-sep" />
-            <button className={`mp-btn toggle ${shuffle ? 'on' : ''}`} onClick={() => setShuffle((v) => !v)} aria-pressed={shuffle} title="Shuffle">⤮</button>
-            <button className={`mp-btn toggle ${repeat ? 'on' : ''}`} onClick={() => setRepeat((v) => !v)} aria-pressed={repeat} title="Repeat playlist">⟳</button>
-            <span className="mp-vol">
+            <button className="mp-btn wide mp-play" onClick={playPause} aria-label={state === 'playing' ? 'Pause' : 'Play'}>{state === 'playing' ? '❚❚' : '▶'}</button>
+            <button className="mp-btn mp-desk" onClick={stop} aria-label="Stop">■</button>
+            <span className="mp-sep mp-desk" />
+            <button className="mp-btn mp-prev" onClick={() => next(-1)} aria-label="Previous track">|◀◀</button>
+            <button className="mp-btn mp-desk" onClick={() => seek(time - 10)} aria-label="Rewind 10 seconds">◀◀</button>
+            <button className="mp-btn mp-desk" onClick={() => seek(time + 10)} aria-label="Forward 10 seconds">▶▶</button>
+            <button className="mp-btn mp-next" onClick={() => next(1)} aria-label="Next track">▶▶|</button>
+            <span className="mp-sep mp-desk" />
+            <button className={`mp-btn toggle mp-shuf ${shuffle ? 'on' : ''}`} onClick={() => setShuffle((v) => !v)} aria-pressed={shuffle} title="Shuffle" aria-label="Shuffle">⤮</button>
+            <button className={`mp-btn toggle mp-rep ${repeat ? 'on' : ''}`} onClick={() => setRepeat((v) => !v)} aria-pressed={repeat} title="Repeat playlist" aria-label="Repeat playlist">⟳</button>
+            <span className="mp-vol mp-desk">
               <span aria-hidden="true">🔊</span>
               <input type="range" min={0} max={100} value={vol} onChange={(e) => setVolume(Number(e.target.value))} aria-label="Volume" />
             </span>
@@ -171,7 +193,7 @@ export function MediaPlayer({ args }: { args: Args }) {
             {track.note && <div><span>Note:</span>{track.note}</div>}
           </div>
         </div>
-        <div className="mp-list sunken" role="listbox" aria-label="Playlist">
+        <div ref={list} className="mp-list sunken" role="listbox" aria-label="Playlist">
           <div className="mp-list-head">Nehad's Playlist · {playlist.length} tracks</div>
           {playlist.map((t, i) => {
             const header = t.group && t.group !== lastGroup ? t.group : null

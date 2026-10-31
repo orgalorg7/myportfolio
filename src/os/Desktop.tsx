@@ -8,7 +8,7 @@ import { Window } from './Window'
 import { TASKBAR_H, useWM } from './wm'
 import { wallpaperStyle } from './wallpapers'
 import { sfx } from './sound'
-import { recentTouch } from './touch'
+import { openedByTap, recentTouch } from './touch'
 import { CELL_H, CELL_W, cellToPx, dropIcons, gridSize, layoutIcons, pxToCell } from './iconGrid'
 
 type DIcon = { id: string; label: string; icon: IconName; shortcut?: boolean; open: () => void; props?: () => void; right?: boolean }
@@ -110,7 +110,7 @@ export function Desktop() {
     setDragDelta(null)
     // A plain click on one icon of a multi-selection narrows the selection to it.
     if (d?.wasSelected && selected.size > 1) setSelected(new Set([ic.id]))
-    if (e.pointerType === 'touch') { sfx.click(); ic.open() }
+    if (e.pointerType === 'touch') { openedByTap(); sfx.click(); ic.open() }
   }
 
   const iconMenu = (ic: DIcon, x: number, y: number) => {

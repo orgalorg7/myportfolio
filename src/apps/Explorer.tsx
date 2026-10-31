@@ -5,7 +5,7 @@ import { projectById } from '../data/projects'
 import { useRunAction } from '../os/actions'
 import { Icon } from '../os/icons'
 import { sfx } from '../os/sound'
-import { recentTouch } from '../os/touch'
+import { openedByTap, recentTouch } from '../os/touch'
 import { ContextMenu, MenuBar, type MenuItem } from '../os/ui'
 import { useWin, useWM } from '../os/wm'
 import { NavIcon } from './navicons'
@@ -167,7 +167,7 @@ export function Explorer({ args }: { args?: { path?: string } }) {
               <thead><tr><th>Name</th><th>Size</th><th>Type</th><th>Description</th></tr></thead>
               <tbody>
                 {items.map((c) => (
-                  <tr key={c.name} className={sel === c.name ? 'sel' : ''} onClick={() => setSel(c.name)} onDoubleClick={() => { if (!recentTouch()) openItem(c) }} onPointerUp={(e) => { if (e.pointerType === 'touch') openItem(c) }}
+                  <tr key={c.name} className={sel === c.name ? 'sel' : ''} onClick={() => setSel(c.name)} onDoubleClick={() => { if (!recentTouch()) openItem(c) }} onPointerUp={(e) => { if (e.pointerType === 'touch') { openedByTap(); openItem(c) } }}
                     onContextMenu={(e) => { e.preventDefault(); itemMenu(c, e.clientX, e.clientY) }}>
                     <td><Icon name={c.icon} size={16} /> {c.name}</td><td>{c.size ?? ''}</td><td>{c.type}</td><td>{c.description ?? ''}</td>
                   </tr>
@@ -178,7 +178,7 @@ export function Explorer({ args }: { args?: { path?: string } }) {
             <div key={c.name} className={`file-item ${sel === c.name ? 'selected' : ''}`} tabIndex={0}
               onClick={(e) => { e.stopPropagation(); setSel(c.name) }}
               onDoubleClick={() => { if (!recentTouch()) openItem(c) }}
-              onPointerUp={(e) => { if (e.pointerType === 'touch') openItem(c) }}
+              onPointerUp={(e) => { if (e.pointerType === 'touch') { openedByTap(); openItem(c) } }}
               onKeyDown={(e) => e.key === 'Enter' && openItem(c)}
               onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); itemMenu(c, e.clientX, e.clientY) }}>
               <Icon name={c.icon} size={view === 'large' ? 32 : 16} shortcut={c.kind === 'link' && view === 'large'} />
