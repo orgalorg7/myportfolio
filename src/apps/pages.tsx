@@ -363,7 +363,7 @@ function Resume({ nav }: { nav: Nav }) {
         ))}
         <div className="cv-item">
           <p><b>{profile.team.role}</b>, <Ext href={profile.team.url}>{profile.team.name}</Ext> (software studio, Cairo)</p>
-          <ul className="wp-ul"><li>Team member building client products: commerce platforms and point-of-sale systems for businesses in Egypt, including BioReza (live) and ORIALANCE (live).</li></ul>
+          <ul className="wp-ul"><li>Team member building client products: commerce platforms and point-of-sale systems for businesses in Egypt, including BioReza (live){/* and ORIALANCE (live): hidden for now */}.</li></ul>
         </div>
         <h2>Selected projects</h2>
         <ul className="wp-ul">

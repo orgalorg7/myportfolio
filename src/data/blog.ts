@@ -61,13 +61,15 @@ The web build slides by 4 tokens instead, so the cache is rebuilt once every 4 t
 
 Ask it who created it. It knows.`,
   },
+  // ORIALANCE is hidden for now. To show it again, the first line was:
+  // I've worked on a cosmetics store (BioReza), a clothing brand's store (ORIALANCE) and a point of sale for a gold shop, mostly as part of a small team.
   {
     id: 'money',
     group: blogGroup,
     subject: 'Money is an integer: lessons from building commerce in Egypt',
     date: '2026-10-31',
     summary: 'Piastres, idempotency keys, expiry dates and records you never delete.',
-    body: `I've worked on a cosmetics store (BioReza), a clothing brand's store (ORIALANCE) and a point of sale for a gold shop, mostly as part of a small team. The interfaces differ completely. The lessons underneath are the same.
+    body: `I've worked on a cosmetics store (BioReza) and a point of sale for a gold shop, mostly as part of a small team. The interfaces differ completely. The lessons underneath are the same.
 
 1. Money is an integer. BioReza stores every amount in piastres, never as a float. The gold POS uses decimal.js with one central rounding policy, because weights and prices per gram don't fit in integers.
 
